@@ -39,3 +39,6 @@ Thumbs.db
 # Project specific #
 ####################
 Traffic_Crashes_-_Crashes.csv
+__pycache__/functions.cpython-39.pyc
+__pycache__/log.cpython-39.pyc
+chicago_map.png
