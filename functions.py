@@ -136,6 +136,9 @@ def dummy_data(df, number_vertical_bins, number_horizontal_bins):
     """
     df = bin_gps(df, number_vertical_bins, number_horizontal_bins)
     df = pd.get_dummies(df, columns=["LAT_BIN", "LON_BIN"])
+    # remove original LATITUDE and LONGITUDE columns
+    df.drop(["LATITUDE", "LONGITUDE"], axis=1, inplace=True)
+
     return df
 
 
@@ -156,8 +159,6 @@ def gps_crawl(crash_df):
         # bin the GPS data
         binned_df = dummy_data(X, bins, 501 - bins)
 
-        # remove original LATITUDE and LONGITUDE columns
-        binned_df.drop(["LATITUDE", "LONGITUDE"], axis=1, inplace=True)
         print(f"Binned dataframe shape: {binned_df.shape}")
         # split data into train and test sets
         X_train, X_test, y_train, y_test = train_test_split(
