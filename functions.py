@@ -156,7 +156,7 @@ def plot_bins(df, number_vertical_bins, number_horizontal_bins):
     # plot the bins
     fig, ax = plt.subplots()
     # set size of plot
-    fig.set_size_inches(10, 15)
+    fig.set_size_inches(20, 30)
     ax.set_xlim(min_lon, max_lon)
     ax.set_ylim(min_lat, max_lat)
     ax.set_xlabel("Longitude")
