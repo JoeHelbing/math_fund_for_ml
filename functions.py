@@ -165,10 +165,12 @@ def plot_bins(df, number_vertical_bins, number_horizontal_bins):
     ax.grid()
     ax.scatter(df["LONGITUDE"], df["LATITUDE"], c="black", s=0.1)
     # plot the bin edges
-    for i in latlines[1:]:
-        ax.axhline(y=i, c="r", lw=0.5)
-    for i in lonlines[1:]:
-        ax.axvline(x=i, c="r", lw=0.5)
+    for i, val in enumerate(latlines[1:]):
+        if i % 10 == 0:
+            ax.axhline(val, color="red", alpha=0.5, lw=0.5)
+    for i, val in enumerate(lonlines[1:]):
+        if i % 10 == 0:
+            ax.axvline(val, color="red", alpha=0.5, lw=0.5)
     plt.show()
 
 def gps_crawl(crash_df):
@@ -192,6 +194,8 @@ def gps_crawl(crash_df):
         print(f"Number of vertical bins: {bins}")
         print(f"Number of horizontal bins: {501 - bins}")
         # plot the bin structure
+        print(f"Plotting bins... (Only shows every 10th bin line for each vert and horz")
+        print(f"Gives bin shape but each bin 10x smaller")
         plot_bins(X_train, bins, 501 - bins)
 
         # bin the GPS data
