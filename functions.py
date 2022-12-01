@@ -147,9 +147,11 @@ def dummy_data(df, number_vertical_bins, number_horizontal_bins):
     creates dummy variables for the binning structure
     """
     df = bin_gps(df, number_vertical_bins, number_horizontal_bins)
-    df = pd.get_dummies(df, columns=["LAT_BIN", "LON_BIN"])
+    # concatonates the binning structure into a single column
+    df["BIN"] = df["LAT_BIN"].astype(str) + df["LON_BIN"].astype(str)
+    df = pd.get_dummies(df, columns=["BIN"])
     # remove original LATITUDE and LONGITUDE columns
-    df.drop(["LATITUDE", "LONGITUDE"], axis=1, inplace=True)
+    df.drop(["LATITUDE", "LONGITUDE", "LAT_BIN", "LON_BIN"], axis=1, inplace=True)
 
     return df
 
