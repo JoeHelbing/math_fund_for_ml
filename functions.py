@@ -13,7 +13,7 @@ class LogisticRegression:
     """
 
     def __init__(
-        self, learning_rate=0.01, n_iters=100, plot_loss=False, epsilon=(1 * 10 ^ -7)
+        self, learning_rate=0.05, n_iters=100, plot_loss=False, epsilon=0.0001
     ):
         self.lr = learning_rate
         self.n_iters = n_iters
@@ -22,7 +22,8 @@ class LogisticRegression:
         self.plot_loss = plot_loss
         self.cost = []
         self.epsilon = epsilon
-        # self.intercept = intercept
+        self.y_pred_sigmoid = None
+
 
     def train(self, X, y):
         """
@@ -80,12 +81,13 @@ class LogisticRegression:
 
     def logistic_regression_cost_function(self, y, y_pred, num_samples):
         """
-        Compute the loss of the model
+        Compute the loss of the logistic regression model
         """
-        cost = -1 * (
-            (1 / num_samples)
-            * np.sum((y * np.log(y_pred) - (1 - y) * np.log(1 - y_pred)))
-        )
+        cost = (1 / num_samples) * (((-y).T @ np.log(y_pred + self.epsilon))-((1-y).T @ np.log(1-y_pred + self.epsilon)))
+        # cost = -1 * (
+        #     (1 / num_samples)
+        #     * np.sum((y * np.log(y_pred) - (1 - y) * np.log(1 - y_pred)))
+        # )
         return cost
 
     def predict(self, X):
@@ -94,7 +96,8 @@ class LogisticRegression:
         """
         linear = self.linear_function(X)
         sigmoid = self.sigmoid_function(linear)
-        y_pred = np.sign(sigmoid)
+        self.y_pred_sigmoid = sigmoid
+        y_pred = np.rint(sigmoid)
         return y_pred
 
     def accuracy(self, y_true, y_pred):
@@ -239,3 +242,58 @@ def save_object(obj, filename):
     with open(filename, "wb") as outp:  # Overwrites any existing file.
         pickle.dump(obj, outp, pickle.HIGHEST_PROTOCOL)
 
+# class RandomForest:
+#     """
+#     Impliments a random forest classifier
+#     """
+    
+#         def __init__(self, n_trees, n_features, n_iters=100, plot_loss=False):
+#             self.n_trees = n_trees
+#             self.n_features = n_features
+#             self.n_iters = n_iters
+#             self.plot_loss = plot_loss
+#             self.models = []
+    
+#         def train(self, X, y):
+#             """
+#             Trains the random forest
+#             """
+#             for i in range(self.n_trees):
+#                 print(f"Training Tree {i + 1} of {self.n_trees}")
+#                 model = DecisionTree(self.n_features, self.n_iters, self.plot_loss)
+#                 model.train(X, y)
+#                 self.models.append(model)
+    
+#         def predict(self, X):
+#             """
+#             Predicts the class of the data
+#             """
+#             y_preds = []
+#             for model in self.models:
+#                 y_pred = model.predict(X)
+#                 y_preds.append(y_pred)
+#             y_preds = np.array(y_preds)
+#             y_pred = np.array([np.argmax(np.bincount(y_preds[:, i])) for i in range(len(X))])
+#             return y_pred
+    
+#         def accuracy(self, y_true, y_pred):
+#             """
+#             Computes the accuracy of the model
+#             """
+#             accuracy = np.sum(y_true == y_pred) / len(y_true)
+#             return accuracy
+    
+#         def save(self, filename):
+#             """
+#             Saves the model
+#             """
+#             with open(filename, "wb") as outp:  # Overwrites any existing file.
+#                 pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
+    
+#         def load(self, filename):
+#             """
+#             Loads the model
+#             """
+#             with open(filename, "rb") as inp:
+#                 model = pickle.load(inp)
+#             return model
